@@ -5,6 +5,10 @@ import aiohttp
 import sqlite3
 import os
 
+# setup for auto-running the script when a new commit is available
+with open('/root/WatchBuddies/pidfile', 'w') as f:
+    f.write(str(os.getpid()))
+
 load_dotenv()  # take environment variables from .env.
 
 # setup for Discord
