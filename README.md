@@ -18,6 +18,7 @@ WatchBuddies is a Discord bot which enables groups of friends to collaborate on 
 	TMDB_API_KEY=replace-this-with-your-tmdb-api-key
 	```
 *The TMDB_API_KEY is not currently used, so you may choose to provide a dummy value instead. Note that future updates may integrate TMDB functionality, in which case you will need to update your .env file to include an API key.*
+
 3. Configure a new Discord bot with the appropriate permissions.
 
 ### Executing program
@@ -56,7 +57,6 @@ Run it as a systemd service with an associated Flask server to restart the Watch
 	sudo systemctl enable FlaskServer.service
 	sudo systemctl start  FlaskServer.service
 	sudo systemctl status FlaskServer.service
-
 	```
 4. Create a systemd service file:
 	```
@@ -81,6 +81,5 @@ Run it as a systemd service with an associated Flask server to restart the Watch
 	sudo systemctl enable WatchBuddies.service
 	sudo systemctl start  WatchBuddies.service
 	sudo systemctl status WatchBuddies.service
-	
 	```
 7. Set up your version control system to POST a webhook to your server when there are updates to the repository. For example, if your server's IP is 1.1.1.1, you would have the webhook call http://1.1.1.1:5000/webhook.
