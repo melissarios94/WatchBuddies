@@ -1,0 +1,4 @@
+*.db
+pidfile
+.env
+.DS_Store
