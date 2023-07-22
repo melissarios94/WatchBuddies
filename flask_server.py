@@ -9,7 +9,7 @@ def webhook():
     if request.method == 'POST':
         os.system('kill $(cat ./pidfile)')
         os.system('git pull')
-        subprocess.Popen(['python3', './moviebot.py'])
+        subprocess.Popen(['python3', './WatchBuddies.py'])
         return '', 200
     else:
         return '', 400
