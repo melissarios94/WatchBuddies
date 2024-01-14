@@ -4,6 +4,7 @@ from dotenv import load_dotenv
 import aiohttp
 import sqlite3
 import os
+import random
 
 # setup for auto-running the script when a new commit is available
 with open('/root/WatchBuddies/pidfile', 'w') as f:
@@ -83,6 +84,24 @@ async def viewlist(ctx):
     if movies:
         movie_list = "\n".join(f"{movie[0]} - {movie[1]}" for movie in movies)
         await ctx.send(movie_list)
+    else:
+        await ctx.send("No movies in the watchlist.")
+
+@bot.command()
+async def pickrandom(ctx, number: int):
+    # Get all movies from the database
+    c.execute("SELECT title FROM movies")
+    all_movies = c.fetchall()
+
+    if all_movies:
+        # If there are fewer movies than the requested number, notify the user
+        if len(all_movies) < number:
+            await ctx.send(f"Only {len(all_movies)} movies in the watchlist. Unable to select {number} movies.")
+        else:
+            # Randomly select 'number' movies from the list
+            selected_movies = random.sample(all_movies, number)
+            movie_list = "\n".join(movie[0] for movie in selected_movies)
+            await ctx.send(f"Randomly selected movies:\n{movie_list}")
     else:
         await ctx.send("No movies in the watchlist.")
 
