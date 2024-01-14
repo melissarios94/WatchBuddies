@@ -48,7 +48,7 @@ conn.commit()
 async def on_ready():
     print(f'We have logged in as {bot.user}')
 
-@bot.command()
+@bot.command(brief='Add a new movie to the watchlist', help='Adds a new movie to the watchlist. Usage: !addmovie [movie_name]')
 async def addmovie(ctx, *, movie_name):
     # Check if the movie already exists in the database
     c.execute("SELECT * FROM movies WHERE title = ?", (movie_name,))
@@ -72,7 +72,7 @@ async def addmovie(ctx, *, movie_name):
                     response = await r.text()
                     await ctx.send(f"API request failed with status {r.status} and response {response}.")
 
-@bot.command()
+@bot.command(brief='Remove a movie from the watchlist.', help='Removes a movie from the watchlist. Usage: !removemovie [movie_name]')
 async def removemovie(ctx, *, movie_name):
     # Remove the quotes around the movie name if present
     if movie_name.startswith('"') and movie_name.endswith('"'):
@@ -87,7 +87,7 @@ async def removemovie(ctx, *, movie_name):
     else:
         await ctx.send(f'Movie "{movie_name}" not found in the watchlist.')
 
-@bot.command()
+@bot.command(brief='Mark a movie as watched.', help='Moves a movie from the watchlist to the watched list, marking it as watched. Usage: !watchedmovie [movie_name]')
 async def watchedmovie(ctx, *, movie_name):
     # Check if the movie exists in the watchlist
     c.execute("SELECT * FROM movies WHERE title = ?", (movie_name,))
@@ -102,7 +102,7 @@ async def watchedmovie(ctx, *, movie_name):
     else:
         await ctx.send(f'Movie "{movie_name}" not found in the watchlist.')
 
-@bot.command()
+@bot.command(brief='View the current watchlist of movies', help='Displays the current list of movies in the watchlist. Usage: !viewlist')
 async def viewlist(ctx):
     # Get all movies from the database
     c.execute("SELECT title FROM movies")
@@ -114,7 +114,7 @@ async def viewlist(ctx):
     else:
         await ctx.send("No movies in the watchlist.")
 
-@bot.command()
+@bot.command(brief='View the list of watched movies', help='Shows all movies that have been marked as watched. Usage: !viewwatchedlist')
 async def viewwatchedlist(ctx):
     # Get all watched movies from the database
     c.execute("SELECT title FROM watched_movies")
@@ -126,7 +126,7 @@ async def viewwatchedlist(ctx):
     else:
         await ctx.send("No watched movies.")
 
-@bot.command()
+@bot.command(brief='Select number of movies randomly from the watchlist', help='Randomly selects a specified number of movies from the watchlist. Usage: !pickrandom [number of movies]')
 async def pickrandom(ctx, number: int):
     # Get all movies from the database
     c.execute("SELECT title FROM movies")
@@ -144,13 +144,7 @@ async def pickrandom(ctx, number: int):
     else:
         await ctx.send("No movies in the watchlist.")
 
-@bot.command()
-async def viewcommands(ctx):
-    commands_list = [command.name for command in bot.commands]
-    formatted_commands = '\n'.join(f'!{cmd}' for cmd in commands_list)
-    await ctx.send(f"Available commands:\n{formatted_commands}")
-
-@bot.command()
+@bot.command(brief='Shows the latest changelog from GitHub', help='Retrieves and displays the latest commit message from the GitHub repository. Usage: !changelog')
 async def changelog(ctx):
     # Set GitHub repo details
     owner = "melissarios94"
@@ -169,7 +163,7 @@ async def changelog(ctx):
             else:
                 await ctx.send("Failed to fetch the changelog.")
 
-@bot.command()
+@bot.command(brief='Test the responsiveness of the bot.',help='A simple test command to check if the bot is online and responsive. Usage: !test')
 async def test(ctx):
     await ctx.send('Test successful!')
 
