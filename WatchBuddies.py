@@ -145,28 +145,22 @@ async def pickrandom(ctx, number: int):
 
 @bot.command()
 async def changelog(ctx):
-    # Get the current directory
-    current_dir = os.getcwd()
-    
-    # Construct the file path to the changelog
-    changelog_path = os.path.join(current_dir, 'changelog.txt')
-    
-    # Print the absolute file path for debugging
-    print(changelog_path)
-    
-    # Read the changelog
-    with open(changelog_path, 'r') as file:
-        lines = file.readlines()
-        print(lines)
-        
-    if lines:
-        # Get the first line of the changelog
-        first_line = lines[0].strip()
+    # Set GitHub repo details
+    owner = melissarios94
+    repo = WatchBuddies
 
-        # Send the first line as a message
-        await ctx.send(f"Changelog: {first_line}")
-    else:
-        await ctx.send("No changelog available.")
+    # GitHub API URL to fetch the latest commit
+    url = f'https://api.github.com/repos/{owner}/{repo}/commits'
+
+    # Make an HTTP request to the GitHub API
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url) as response:
+            if response.status == 200:
+                commits = await response.json()
+                latest_commit = commits[0]['commit']['message']
+                await ctx.send(f"Latest changelog: {latest_commit}")
+            else:
+                await ctx.send("Failed to fetch the changelog.")
 
 @bot.command()
 async def test(ctx):
