@@ -116,11 +116,11 @@ async def viewlist(ctx):
 @bot.command()
 async def viewwatchedlist(ctx):
     # Get all watched movies from the database
-    c.execute("SELECT title, watched_date FROM watched_movies")
+    c.execute("SELECT title FROM watched_movies")
     watched_movies = c.fetchall()
 
     if watched_movies:
-        watched_movie_list = "\n".join(f"{movie[0]} (Watched on: {movie[1]})" for movie in watched_movies)
+        watched_movie_list = "\n".join(movie[0] for movie in watched_movies)
         await ctx.send(f"Watched movies:\n{watched_movie_list}")
     else:
         await ctx.send("No watched movies.")
