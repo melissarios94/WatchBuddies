@@ -23,12 +23,23 @@ bot = commands.Bot(command_prefix='!', intents=intents)
 
 # Connect to the SQLite database
 conn = sqlite3.connect('movies.db')
+
+# Create the default watchlist
 c = conn.cursor()
 c.execute('''
     CREATE TABLE IF NOT EXISTS movies (
         id INTEGER PRIMARY KEY,
         title TEXT NOT NULL,
         release_date TEXT NOT NULL
+    )
+''')
+conn.commit()
+
+# Create the watched list
+c.execute('''
+    CREATE TABLE IF NOT EXISTS watched_movies (
+        id INTEGER PRIMARY KEY,
+        title TEXT NOT NULL
     )
 ''')
 conn.commit()
@@ -77,6 +88,21 @@ async def removemovie(ctx, *, movie_name):
         await ctx.send(f'Movie "{movie_name}" not found in the watchlist.')
 
 @bot.command()
+async def watchedmovie(ctx, *, movie_name):
+    # Check if the movie exists in the watchlist
+    c.execute("SELECT * FROM movies WHERE title = ?", (movie_name,))
+    movie = c.fetchone()
+
+    if movie:
+        # Move the movie to the watched movies list
+        c.execute("INSERT INTO watched_movies (title) VALUES (?)", (movie_name,))
+        c.execute("DELETE FROM movies WHERE title = ?", (movie_name,))
+        conn.commit()
+        await ctx.send(f'Moved "{movie_name}" to the watched list.')
+    else:
+        await ctx.send(f'Movie "{movie_name}" not found in the watchlist.')
+
+@bot.command()
 async def viewlist(ctx):
     # Get all movies from the database
     c.execute("SELECT id, title FROM movies")
@@ -86,6 +112,18 @@ async def viewlist(ctx):
         await ctx.send(movie_list)
     else:
         await ctx.send("No movies in the watchlist.")
+
+@bot.command()
+async def viewwatchedlist(ctx):
+    # Get all watched movies from the database
+    c.execute("SELECT title, watched_date FROM watched_movies")
+    watched_movies = c.fetchall()
+
+    if watched_movies:
+        watched_movie_list = "\n".join(f"{movie[0]} (Watched on: {movie[1]})" for movie in watched_movies)
+        await ctx.send(f"Watched movies:\n{watched_movie_list}")
+    else:
+        await ctx.send("No watched movies.")
 
 @bot.command()
 async def pickrandom(ctx, number: int):
