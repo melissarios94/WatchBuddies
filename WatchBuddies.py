@@ -145,6 +145,12 @@ async def pickrandom(ctx, number: int):
         await ctx.send("No movies in the watchlist.")
 
 @bot.command()
+async def viewcommands(ctx):
+    commands_list = [command.name for command in bot.commands]
+    formatted_commands = '\n'.join(f'!{cmd}' for cmd in commands_list)
+    await ctx.send(f"Available commands:\n{formatted_commands}")
+
+@bot.command()
 async def changelog(ctx):
     # Set GitHub repo details
     owner = "melissarios94"
