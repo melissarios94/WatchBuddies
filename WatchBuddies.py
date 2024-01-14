@@ -146,8 +146,8 @@ async def pickrandom(ctx, number: int):
 @bot.command()
 async def changelog(ctx):
     # Set GitHub repo details
-    owner = melissarios94
-    repo = WatchBuddies
+    owner = "melissarios94"
+    repo = "WatchBuddies"
 
     # GitHub API URL to fetch the latest commit
     url = f'https://api.github.com/repos/{owner}/{repo}/commits'
