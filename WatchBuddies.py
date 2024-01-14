@@ -105,10 +105,11 @@ async def watchedmovie(ctx, *, movie_name):
 @bot.command()
 async def viewlist(ctx):
     # Get all movies from the database
-    c.execute("SELECT id, title FROM movies")
+    c.execute("SELECT title FROM movies")
     movies = c.fetchall()
+    
     if movies:
-        movie_list = "\n".join(f"{movie[0]} - {movie[1]}" for movie in movies)
+        movie_list = "\n".join(f"{index + 1} - {movie[0]}" for index, movie in enumerate(movies))
         await ctx.send(movie_list)
     else:
         await ctx.send("No movies in the watchlist.")
