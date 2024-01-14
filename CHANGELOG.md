@@ -1,4 +1,5 @@
-# Changelog
+# (DEPRECATED) Changelog
+# !changelog now uses GitHub's built-in commit message as of 01/13/24
 
 ## 07/22/23
 - Added README.md with information about how to install the script.
